@@ -36,7 +36,6 @@ public class ProductMap : IEntityTypeConfiguration<Product>
             .HasColumnType("TIMESTAMPTZ");
 
         builder.Property(x => x.UpdatedAt)
-            .IsRequired()
             .HasColumnName("UpdatedAt")
             .HasColumnType("TIMESTAMPTZ");
     }
