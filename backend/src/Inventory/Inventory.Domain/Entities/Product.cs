@@ -1,4 +1,6 @@
-namespace Inventory.Domain;
+using Inventory.Domain.Exceptions;
+
+namespace Inventory.Domain.Entities;
 
 public class Product
 {
