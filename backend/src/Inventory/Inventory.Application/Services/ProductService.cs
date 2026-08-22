@@ -53,14 +53,14 @@ public class ProductService(AppDbContext context) : IProductService
         return Result<ProductDTO>.Success(product.ToDto());
     }
 
-    public Task<Result<ProductDTO>> IncreaseStockAsync(Guid id, int quantity)
-        => ExecuteAsync(id, p => p.IncreaseStockBalance(quantity));
+    public Task<Result<ProductDTO>> IncreaseStockAsync(Guid id, AdjustStockDto dto)
+        => ExecuteAsync(id, p => p.IncreaseStockBalance(dto.Quantity));
 
-    public Task<Result<ProductDTO>> DecreaseStockAsync(Guid id, int quantity)
-        => ExecuteAsync(id, p => p.DecreaseStockBalance(quantity));
+    public Task<Result<ProductDTO>> DecreaseStockAsync(Guid id, AdjustStockDto dto)
+        => ExecuteAsync(id, p => p.DecreaseStockBalance(dto.Quantity));
 
-    public Task<Result<ProductDTO>> UpdateDescriptionAsync(Guid id, string description)
-        => ExecuteAsync(id, p => p.UpdateDescription(description));
+    public Task<Result<ProductDTO>> UpdateDescriptionAsync(Guid id, UpdateDescriptionDto dto)
+        => ExecuteAsync(id, p => p.UpdateDescription(dto.Description));
 
     public async Task<Result<bool>> DeleteAsync(Guid id)
     {
