@@ -6,4 +6,10 @@
     <Project Path="src/Inventory/Inventory.Domain/Inventory.Domain.csproj" />
     <Project Path="src/Inventory/Inventory.Infrastructure/Inventory.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/src/Billing/">
+      <Project Path="src/Billing/Billing.Api/Billing.Api.csproj" />
+      <Project Path="src/Billing/Billing.Application/Billing.Application.csproj" />
+      <Project Path="src/Billing/Billing.Domain/Billing.Domain.csproj" />
+      <Project Path="src/Billing/Billing.Infrastructure/Billing.Infrastructure.csproj" />
+  </Folder>
 </Solution>
