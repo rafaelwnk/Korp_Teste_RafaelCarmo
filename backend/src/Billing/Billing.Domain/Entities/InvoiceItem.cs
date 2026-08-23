@@ -9,6 +9,8 @@ public class InvoiceItem
     public Guid ProductId { get; private set; }
     public string ProductCode { get; private set; } = default!;
     public int Quantity { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public DateTime? UpdatedAt { get; private set; }
 
     private InvoiceItem() { }
 
@@ -28,6 +30,7 @@ public class InvoiceItem
         ProductId = productId;
         ProductCode = productCode;
         Quantity = quantity;
+        CreatedAt = DateTime.UtcNow;
     }
 
     public void IncreaseQuantity(int quantity)
@@ -36,5 +39,6 @@ public class InvoiceItem
             throw new DomainException("Item quantity must be greater than zero.");
 
         Quantity += quantity;
+        UpdatedAt = DateTime.UtcNow;
     }
 }

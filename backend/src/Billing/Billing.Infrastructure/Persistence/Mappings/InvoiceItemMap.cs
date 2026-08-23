@@ -26,5 +26,14 @@ public class InvoiceItemMap : IEntityTypeConfiguration<InvoiceItem>
             .IsRequired()
             .HasColumnName("Quantity")
             .HasColumnType("INT");
+
+        builder.Property(x => x.CreatedAt)
+            .IsRequired()
+            .HasColumnName("CreatedAt")
+            .HasColumnType("TIMESTAMPTZ");
+
+        builder.Property(x => x.UpdatedAt)
+            .HasColumnName("UpdatedAt")
+            .HasColumnType("TIMESTAMPTZ");
     }
 }
