@@ -19,7 +19,7 @@ public class Invoice
         Status = InvoiceStatus.Open;
         CreatedAt = DateTime.UtcNow;
     }
-    
+
     public void AddItem(Guid productId, string productCode, int quantity)
     {
         if (Status != InvoiceStatus.Open)
@@ -41,6 +41,20 @@ public class Invoice
         else
             _items.Add(new InvoiceItem(Id, productId, productCode, quantity));
 
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void RemoveItem(Guid itemId)
+    {
+        if (Status != InvoiceStatus.Open)
+            throw new InvalidInvoiceStatusException(Number, "remove items");
+
+        var item = _items.FirstOrDefault(i => i.Id == itemId);
+
+        if (item is null)
+            throw new DomainException($"Item with id '{itemId}' was not found in this invoice.");
+
+        _items.Remove(item);
         UpdatedAt = DateTime.UtcNow;
     }
 
