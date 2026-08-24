@@ -1,6 +1,8 @@
+using Billing.Infrastructure.Common;
+
 namespace Billing.Infrastructure.Interfaces;
 
 public interface IInventoryServiceClient
 {
-    Task<bool> DecreaseStockAsync(Guid productId, int quantity, CancellationToken ct = default);
+    Task<InventoryResult> DecreaseStockAsync(Guid productId, int quantity, CancellationToken ct = default);
 }

@@ -116,12 +116,10 @@ public class InvoiceService(AppDbContext context, IInventoryServiceClient invent
 
         foreach (var item in invoice.Items)
         {
-            var stockUpdated = await inventoryClient.DecreaseStockAsync(item.ProductId, item.Quantity);
+            var result = await inventoryClient.DecreaseStockAsync(item.ProductId, item.Quantity);
 
-            if (!stockUpdated)
-                return Result<InvoiceDTO>.Error(
-                    $"Could not update stock for product '{item.ProductCode}' because the Inventory " +
-                    "service is unavailable. The invoice was not closed, please try again.");
+            if (!result.Success)
+                return Result<InvoiceDTO>.Error(result.Message ?? "Could not close invoice due to an unexpected error.");
         }
 
         await context.SaveChangesAsync();

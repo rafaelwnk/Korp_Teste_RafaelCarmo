@@ -1,3 +1,5 @@
+using Billing.Infrastructure.ExternalServices;
+using Billing.Infrastructure.Interfaces;
 using Billing.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +13,12 @@ public static class DependencyInjection
     {
         services.AddDbContext<AppDbContext>(opt =>
             opt.UseNpgsql(config.GetConnectionString("Default")));
+
+        services.AddHttpClient<IInventoryServiceClient, InventoryServiceClient>(client =>
+        {
+            client.BaseAddress = new Uri(config["Services:Inventory:BaseUrl"]!);
+            client.Timeout = TimeSpan.FromSeconds(5);
+        });
 
         return services;
     }
