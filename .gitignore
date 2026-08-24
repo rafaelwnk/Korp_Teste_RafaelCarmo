@@ -23,10 +23,10 @@ yarn-error.log
 .settings/
 *.sublime-workspace
 
-/.vscode/*
+.vscode/
 .history/*
 
-.angular/cache/
+.angular/
 .sass-cache/
 connect.lock
 coverage/
