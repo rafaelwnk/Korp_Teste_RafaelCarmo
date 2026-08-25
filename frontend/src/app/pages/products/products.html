@@ -1,0 +1,72 @@
+<div class="uk-container uk-margin-top">
+    <h1 class="uk-text-center uk-margin-small-bottom uk-text-muted">Produtos</h1>
+    <div class="uk-flex uk-flex-right uk-margin-bottom">
+        <button class="uk-icon-button uk-button-primary" uk-icon="icon: plus" uk-tooltip="Novo produto"
+            uk-toggle="target: #create-product-modal">
+        </button>
+    </div>
+    <div class="uk-overflow-auto uk-light">
+        <table class="uk-table uk-table-middle uk-table-divider uk-table-striped uk-background-transparent">
+            <thead>
+                <tr>
+                    <th class="uk-text-center">Código</th>
+                    <th class="uk-text-center">Descrição</th>
+                    <th class="uk-text-center">Saldo em Estoque</th>
+                    <th class="uk-text-center">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (productService.products.isLoading()) {
+                <tr>
+                    <td colspan="4" class="uk-text-center">
+                        <span uk-spinner></span>
+                    </td>
+                </tr>
+                } @else if (productService.products.error()) {
+                <tr>
+                    <td colspan="4" class="uk-text-center uk-text-danger">
+                        Erro ao carregar produtos.
+                    </td>
+                </tr>
+                } @else if (!productService.products.value()?.items?.length) {
+                <tr>
+                    <td colspan="4" class="uk-text-center">Nenhum produto encontrado.</td>
+                </tr>
+                } @else {
+                @for (product of productService.products.value()?.items; track product.id) {
+                <tr>
+                    <td class="uk-text-center">{{ product.code }}</td>
+                    <td class="uk-text-center">{{ product.description }}</td>
+                    <td class="uk-text-center">{{ product.stockBalance }}</td>
+                    <td class="uk-text-center">
+                        <button class="uk-icon-link" uk-icon="icon: eye" uk-tooltip="Detalhes"
+                            uk-toggle="target: #product-details-modal" (click)="openDetails(product)">
+                        </button>
+                        <button class="uk-icon-link uk-margin-small-left" uk-icon="icon: pencil" uk-tooltip="Editar"
+                            uk-toggle="target: #edit-product-modal" (click)="openEdit(product)">
+                        </button>
+                        <button class="uk-icon-link uk-margin-small-left" uk-icon="icon: trash" uk-tooltip="Excluir"
+                            uk-toggle="target: #delete-product-modal" (click)="selectedProduct.set(product)">
+                        </button>
+                    </td>
+                </tr>
+                }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (productService.products.value(); as result) {
+    <app-pagination [page]="result.page" [totalPages]="result.totalPages"
+        (pageChange)="productService.page.set($event)" />
+    }
+</div>
+
+<app-product-create-modal (created)="productService.reload()" />
+
+<app-product-details-modal [product]="selectedProduct()" />
+
+<app-product-edit-modal [product]="selectedProduct()" (saved)="productService.reload()" />
+
+<app-confirm-modal modalId="delete-product-modal" title="Excluir produto"
+    [message]="'Deseja excluir o produto ' + (selectedProduct()?.code ?? '') + '?'" (confirmed)="deleteProduct()" />

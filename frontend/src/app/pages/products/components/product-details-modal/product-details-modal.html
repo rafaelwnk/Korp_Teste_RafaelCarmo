@@ -1,0 +1,15 @@
+<app-modal modalId="product-details-modal" title="Detalhes do produto">
+  @if (product(); as p) {
+    <p><strong>Código:</strong> {{ p.code }}</p>
+    <p><strong>Descrição:</strong> {{ p.description }}</p>
+    <p><strong>Saldo em estoque:</strong> {{ p.stockBalance }}</p>
+    <p><strong>Criado em:</strong> {{ p.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+    <p>
+      <strong>Atualizado em:</strong>
+      {{ p.updatedAt ? (p.updatedAt | date: 'dd/MM/yyyy HH:mm') : 'Nunca atualizado' }}
+    </p>
+  }
+  <div modal-footer>
+    <button class="uk-button uk-button-default uk-modal-close" type="button">Fechar</button>
+  </div>
+</app-modal>

@@ -1,0 +1,14 @@
+<div [id]="modalId()" class="uk-flex-top uk-border-rounded" uk-modal>
+  <div class="uk-modal-dialog uk-margin-auto-vertical">
+    <button class="uk-modal-close-default" type="button" uk-close></button>
+    <div class="uk-modal-header">
+      <h2 class="uk-modal-title">{{ title() }}</h2>
+    </div>
+    <div class="uk-modal-body">
+      <ng-content></ng-content>
+    </div>
+    <div class="uk-modal-footer uk-text-right">
+      <ng-content select="[modal-footer]"></ng-content>
+    </div>
+  </div>
+</div>
