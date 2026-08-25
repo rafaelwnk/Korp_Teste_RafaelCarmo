@@ -1,0 +1,16 @@
+<div
+    class="uk-container uk-flex uk-flex-column uk-flex-middle uk-flex-center uk-height-viewport uk-text-center uk-light">
+    <h1 class="uk-text-center uk-margin-medium-bottom uk-text-muted">Korp</h1>
+
+    <p class="uk-text-large uk-width-2-3@m">
+        Este projeto foi desenvolvido como parte de um desafio técnico para a vaga de Desenvolvedor Web Fullstack (C# ou Go + Angular) - Júnior/Pleno.
+    </p>
+
+    <div class="uk-flex uk-flex-center uk-margin-medium-top" uk-margin>
+        @for (social of socialLinks; track social.name) {
+        <a [href]="social.url" target="_blank"class="uk-icon-button uk-margin-small-right"
+            [attr.uk-icon]="'icon: ' + social.icon" [attr.aria-label]="social.name"
+            [attr.uk-tooltip]="social.name"></a>
+        }
+    </div>
+</div>
