@@ -1,0 +1,72 @@
+<div class="uk-container uk-margin-top">
+    <div class="uk-flex uk-flex-right uk-margin-bottom">
+        <button class="uk-icon-button uk-button-primary" uk-icon="icon: plus" uk-tooltip="Nova nota fiscal"
+            uk-toggle="target: #create-invoice-modal">
+        </button>
+    </div>
+    <div class="uk-overflow-auto uk-light">
+        <table class="uk-table uk-table-middle uk-table-divider uk-table-striped uk-background-transparent">
+            <thead>
+                <tr>
+                    <th class="uk-text-center">Número</th>
+                    <th class="uk-text-center">Status</th>
+                    <th class="uk-text-center">Itens</th>
+                    <th class="uk-text-center">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (invoiceService.invoices.isLoading()) {
+                <tr>
+                    <td colspan="4" class="uk-text-center">
+                        <span uk-spinner></span>
+                    </td>
+                </tr>
+                } @else if (invoiceService.invoices.error()) {
+                <tr>
+                    <td colspan="4" class="uk-text-center uk-text-danger">
+                        Erro ao carregar notas fiscais.
+                    </td>
+                </tr>
+                } @else if (!invoiceService.invoices.value()?.items?.length) {
+                <tr>
+                    <td colspan="4" class="uk-text-center">Nenhuma nota fiscal encontrada.</td>
+                </tr>
+                } @else {
+                @for (invoice of invoiceService.invoices.value()?.items; track invoice.id) {
+                <tr>
+                    <td class="uk-text-center">{{ invoice.number }}</td>
+                    <td class="uk-text-center">{{ invoice.status | invoiceStatus }}</td>
+                    <td class="uk-text-center">{{ invoice.items.length }}</td>
+                    <td class="uk-text-center">
+                        <button class="uk-icon-link" uk-icon="icon: eye" uk-tooltip="Detalhes"
+                            uk-toggle="target: #invoice-details-modal" (click)="openDetails(invoice)">
+                        </button>
+                        <button class="uk-icon-link uk-margin-small-left" uk-icon="icon: pencil" uk-tooltip="Editar"
+                            uk-toggle="target: #edit-invoice-modal" (click)="openEdit(invoice)">
+                        </button>
+                        <button class="uk-icon-link uk-margin-small-left" uk-icon="icon: trash" uk-tooltip="Excluir"
+                            uk-toggle="target: #delete-invoice-modal" (click)="selectedInvoice.set(invoice)">
+                        </button>
+                    </td>
+                </tr>
+                }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (invoiceService.invoices.value(); as result) {
+    <app-pagination [page]="result.page" [totalPages]="result.totalPages"
+        (pageChange)="invoiceService.page.set($event)" />
+    }
+</div>
+
+<app-invoice-create-modal (created)="invoiceService.reload()" />
+
+<app-invoice-details-modal [invoice]="selectedInvoice()" />
+
+<app-invoice-edit-modal [invoice]="selectedInvoice()" (saved)="invoiceService.reload()" />
+
+<app-confirm-modal modalId="delete-invoice-modal" title="Excluir nota fiscal"
+    [message]="'Deseja excluir a nota fiscal #' + (selectedInvoice()?.number ?? '') + '?'"
+    (confirmed)="deleteInvoice()" />

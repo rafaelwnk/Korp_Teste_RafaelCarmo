@@ -1,0 +1,63 @@
+<app-modal modalId="edit-invoice-modal" title="Editar nota fiscal">
+  @if (invoice(); as i) {
+    <div>
+      <p class="uk-text-meta">Nota #{{ i.number }} — Status: {{ i.status | invoiceStatus }}</p>
+
+      <p class="uk-margin-small-top"><strong>Itens</strong></p>
+      @if (!i.items.length) {
+        <p class="uk-text-meta">Nenhum item adicionado.</p>
+      } @else {
+        <ul class="uk-list uk-list-divider">
+          @for (item of i.items; track item.id) {
+            <li class="uk-flex uk-flex-between uk-flex-middle">
+              <span>{{ item.productCode }} — Qtd: {{ item.quantity }}</span>
+              <button
+                class="uk-icon-link"
+                uk-icon="icon: trash"
+                uk-tooltip="Remover item"
+                (click)="removeItem(item.id)">
+              </button>
+            </li>
+          }
+        </ul>
+      }
+
+      <form [formGroup]="form" class="uk-margin-top">
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-2">
+            <label class="uk-form-label">Produto</label>
+            <select class="uk-select" formControlName="productId">
+              <option value="" disabled>Selecione um produto</option>
+              @for (product of productService.products.value()?.items; track product.id) {
+                <option [value]="product.id">{{ product.code }} — {{ product.description }}</option>
+              }
+            </select>
+          </div>
+          <div class="uk-width-1-2">
+            <label class="uk-form-label">Quantidade</label>
+            <input class="uk-input" type="number" formControlName="quantity" />
+          </div>
+        </div>
+        @if (form.invalid && form.touched) {
+          <p class="uk-text-danger uk-text-small">Selecione um produto e uma quantidade válida.</p>
+        }
+        <button class="uk-button uk-button-default uk-margin-small-top" type="button" (click)="addItem()">
+          Adicionar item
+        </button>
+      </form>
+    </div>
+  }
+
+  @if (invoice(); as i) {
+    <div modal-footer>
+      <button class="uk-button uk-button-default uk-modal-close" type="button">Fechar</button>
+      <button
+        class="uk-button uk-button-primary"
+        type="button"
+        [disabled]="i.status === 'Closed'"
+        (click)="closeInvoice()">
+        Fechar nota
+      </button>
+    </div>
+  }
+</app-modal>

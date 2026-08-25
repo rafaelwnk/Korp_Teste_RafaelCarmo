@@ -1,0 +1,25 @@
+<app-modal modalId="invoice-details-modal" title="Detalhes da nota fiscal">
+  @if (invoice(); as i) {
+    <p><strong>Número:</strong> {{ i.number }}</p>
+    <p><strong>Status:</strong> {{ i.status | invoiceStatus }}</p>
+    <p><strong>Criado em:</strong> {{ i.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+    <p>
+      <strong>Atualizado em:</strong>
+      {{ i.updatedAt ? (i.updatedAt | date: 'dd/MM/yyyy HH:mm') : 'Nunca atualizado' }}
+    </p>
+
+    <p class="uk-margin-small-top"><strong>Itens:</strong></p>
+    @if (!i.items.length) {
+      <p class="uk-text-meta">Nenhum item adicionado.</p>
+    } @else {
+      <ul class="uk-list uk-list-divider">
+        @for (item of i.items; track item.id) {
+          <li>{{ item.productCode }} — Qtd: {{ item.quantity }}</li>
+        }
+      </ul>
+    }
+  }
+  <div modal-footer>
+    <button class="uk-button uk-button-default uk-modal-close" type="button">Fechar</button>
+  </div>
+</app-modal>
