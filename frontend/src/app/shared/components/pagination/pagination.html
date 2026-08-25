@@ -1,0 +1,17 @@
+@if (totalPages() > 1) {
+  <ul class="uk-pagination uk-flex-center uk-margin-medium-top" uk-margin>
+    <li [class.uk-disabled]="page() === 1">
+      <a (click)="goTo(page() - 1)"><span uk-pagination-previous></span></a>
+    </li>
+
+    @for (num of pages(); track num) {
+      <li [class.uk-active]="num === page()">
+        <a (click)="goTo(num)">{{ num }}</a>
+      </li>
+    }
+
+    <li [class.uk-disabled]="page() === totalPages()">
+      <a (click)="goTo(page() + 1)"><span uk-pagination-next></span></a>
+    </li>
+  </ul>
+}
