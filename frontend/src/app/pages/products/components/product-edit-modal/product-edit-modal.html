@@ -1,0 +1,21 @@
+<app-modal modalId="edit-product-modal" title="Editar produto">
+  <form [formGroup]="form">
+    <div class="uk-margin">
+      <label class="uk-form-label">Descrição</label>
+      <input class="uk-input" formControlName="description" />
+      @if (form.controls.description.invalid && form.controls.description.touched) {
+        <p class="uk-text-danger uk-text-small">Descrição é obrigatória.</p>
+      }
+    </div>
+  </form>
+  <div modal-footer>
+    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
+    <button
+      class="uk-button uk-button-primary uk-modal-close"
+      type="button"
+      [disabled]="form.invalid"
+      (click)="save()">
+      Salvar
+    </button>
+  </div>
+</app-modal>
