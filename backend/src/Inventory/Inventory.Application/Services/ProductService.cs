@@ -5,6 +5,7 @@ using Inventory.Infrastructure.Persistence;
 using Inventory.Application.Common;
 using Inventory.Application.Extensions;
 using Inventory.Domain.Entities;
+using Inventory.Domain.Exceptions;
 
 namespace Inventory.Application.Services;
 
@@ -74,22 +75,16 @@ public class ProductService(AppDbContext context) : IProductService
         return Result<bool>.Success(true);
     }
 
-    private async Task<Result<ProductDTO>> ExecuteAsync(Guid id, Action<Product> action)
+    private Task<Result<ProductDTO>> ExecuteAsync(Guid id, Action<Product> action)
     {
-        var product = await context.Products.FirstOrDefaultAsync(x => x.Id == id);
-        if (product is null)
-            return Result<ProductDTO>.Error($"Product with id '{id}' was not found.");
-
-        var result = ResultFactory.Try(() =>
+        return ResultFactory.TryWithConcurrencyRetryAsync(context, async () =>
         {
+            var product = await context.Products.FirstOrDefaultAsync(x => x.Id == id) ?? throw new DomainException($"Product with id '{id}' was not found.");
+
             action(product);
-            return product;
+            await context.SaveChangesAsync();
+
+            return product.ToDto();
         });
-
-        if (!string.IsNullOrWhiteSpace(result.Message))
-            return Result<ProductDTO>.Error(result.Message);
-
-        await context.SaveChangesAsync();
-        return Result<ProductDTO>.Success(result.Data!.ToDto());
     }
 }

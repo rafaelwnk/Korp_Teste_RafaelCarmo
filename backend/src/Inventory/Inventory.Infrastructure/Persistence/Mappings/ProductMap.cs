@@ -38,5 +38,9 @@ public class ProductMap : IEntityTypeConfiguration<Product>
         builder.Property(x => x.UpdatedAt)
             .HasColumnName("UpdatedAt")
             .HasColumnType("TIMESTAMPTZ");
+
+        builder.Property<uint>("xmin")
+               .HasColumnName("xmin")
+               .IsRowVersion();
     }
 }
