@@ -8,14 +8,49 @@
       }
     </div>
   </form>
+
+  <hr class="uk-divider-icon" />
+
+  <div class="uk-margin">
+    <label class="uk-form-label">Estoque atual: <strong>{{ currentStock() }}</strong></label>
+
+    <form [formGroup]="stockForm" class="uk-flex uk-flex-middle uk-margin-small-top" style="gap: 8px;">
+      <input
+        class="uk-input"
+        type="number"
+        min="1"
+        formControlName="quantity"
+        style="max-width: 100px;"
+      />
+      <button
+        class="uk-button uk-button-primary"
+        type="button"
+        [disabled]="stockForm.invalid"
+        (click)="increaseStock()">
+        + Aumentar
+      </button>
+      <button
+        class="uk-button uk-button-danger"
+        type="button"
+        [disabled]="stockForm.invalid"
+        (click)="decreaseStock()">
+        − Diminuir
+      </button>
+    </form>
+
+    @if (stockForm.controls.quantity.invalid && stockForm.controls.quantity.touched) {
+      <p class="uk-text-danger uk-text-small">Quantidade deve ser maior que zero.</p>
+    }
+  </div>
+
   <div modal-footer>
-    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
+    <button class="uk-button uk-button-default uk-modal-close" type="button">Fechar</button>
     <button
       class="uk-button uk-button-primary uk-modal-close"
       type="button"
       [disabled]="form.invalid"
       (click)="save()">
-      Salvar
+      Salvar descrição
     </button>
   </div>
 </app-modal>
